@@ -2,23 +2,24 @@ const express = require('express');
 const ShopListsRouter = express.Router();
 const ShopListsService = require('./service')
 
-ShopListsRouter.get('/', Utility.parseQuery, (req, res) => {
-    if (!req.query.key) {
-        return res.send(Utility.GenerateErrorMessage(
-          Utility.ErrorTypes.PERMISSION_DENIED)
-        );
+ShopListsRouter.get('/', (req, res) => {
+    // if (!req.query.key) {
+    //     return res.send(Utility.GenerateErrorMessage(
+    //       Utility.ErrorTypes.PERMISSION_DENIED)
+    //     );
+    // }
+    let shoplist = {};
+    if(req.query.id){
+        shoplist._id = req.query.id
     }
-    ShopListsService.getShopLists().then(data => {
+    ShopListsService.getShopLists(shoplist).then(data => {
         return res.send(data);
     });
 });
 
 ShopListsRouter.post('/', (req, res) => {
   let shoplist = {
-      list_name: data.list_name,
-      isActive: data.isActive,
-      _id: data._id,
-      products: data.products
+      list_name: req.body.list_name,
     };
 
     ShopListsService.insertShopLists(shoplist)
@@ -29,26 +30,15 @@ ShopListsRouter.post('/', (req, res) => {
     });
 });
 
-/*ShopListsRouter.put('/:id' (req, res) => {
+ShopListsRouter.put('/:id', (req, res) => {
 
-    if(req.body.password){
-        res.send("If you want to change password make a put request '/api/users/password' ");
-    }
     let id = req.params.id;
-    let user = {};
-    if (req.body.fullname) {
-        user.fullname = req.body.fullname;
+    let shoplist = {};
+    if (req.body.list_name) {
+        shoplist.list_name = req.body.list_name;
     }
-    if (req.body.username) {
-        user.username = req.body.username;
-    }
-    if (isFinite(parseInt(req.body.age))) {
-        user.age = parseInt(req.body.age);
-    }
-    if (req.body.email) {
-        user.email = req.body.email;
-    }
-    UsersService.updateUsers(id, user).then(data => {
+
+    ShopListsService.updateShoplists(id, shoplist).then(data => {
          return res.send(data);
      }).catch(err => {
          res.send(err)
@@ -56,17 +46,19 @@ ShopListsRouter.post('/', (req, res) => {
 
 });
 
-UsersRouter.delete('/:id', auth._auth('admin'), (req, res) => {
-    let id = req.params.id;
-    UsersService.deleteUsers(id).then(data => {
+ShopListsRouter.delete('/:id', (req, res) => {
+    let id = {
+        _id: req.params.id
+    };
+    ShopListsService.deleteShopLists(id).then(data => {
         if(!data) {
-            return res.send(Utility.generateErrorMessage(
-              Utility.ErrorTypes.INVALID_DATA));
+            return res.send(Utility.GenerateErrorMessage(
+              Utility.ErrorTypes.ERROR_IN_SHOPLIST_DELETING));
         }
         return res.send(data);
     }).catch(err =>{
         res.send(err);
     });
 })
-*/
+
 module.exports = ShopListsRouter;

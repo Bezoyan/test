@@ -1,14 +1,27 @@
 const mongoose = require('mongoose');
-const require('./model');
+const model = require('./model');
 const BaseDao = require('./../../core/BaseDao');
 const connect = require('./../../core/DbConnection');
 const Utility = require('./../../../services/utility');
 
 
 
-class UsersDao extends BaseDao {
+class ShopListsDao extends BaseDao {
   constructor() {
-      super(connect.model('users'));
+      super(connect.model('shoplists'));
   }
-
-  module.exports = new ShplistsDao();
+  deleteData1(id) {
+      console.log(id);
+      this.collection.findOne({_id: id},(err,data) =>{
+          if(data.isActive == true){
+              console.log(data);
+             console.log(data.id +" ");
+              return this.collection.update({_id: data.id},{$set: {isActive: false}});
+          }
+          else {
+              return res.send(data);
+          }
+      })
+  }
+}
+  module.exports = new ShopListsDao();

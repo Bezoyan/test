@@ -5,12 +5,10 @@ const connect = require('./../../core/DbConnection');
 const model = require('./model');
 
 
-class UsersDao extends BaseDao {
+class GroupsDao extends BaseDao {
     constructor() {
-      super(connect.model('users'));
+      super(connect.model('groups'));
     }
-
-    
 }
 
-module.exports = new UsersDao();
+module.exports = new GroupsDao();

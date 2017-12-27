@@ -8,8 +8,6 @@ class UsersService {
     return new Promise((resolve, reject) =>{
       //options = options || {};
       return  UsersDao.getData()
-        .skip(req.query.offset)
-        .limit(req.query.limit)
         .then(data => {
             resolve(data);
         }).catch(err => {
@@ -22,13 +20,8 @@ class UsersService {
 
   insertUsers(user) {
     return new Promise((resolve, reject) => {
-      UsersDao.inserData ({
-        username: user.username,
-        password: user.password,
-        email: user.email,
-        name: user.name,
-        age: user.age
-      }). then(data => {
+      UsersDao.inserData (
+      user). then(data => {
         resolve(data);
       }).catch(err => {
         reject(Utylity.GenerateErrorMessage(
@@ -49,9 +42,9 @@ class UsersService {
     });
   }
 
-  deleteUsers(id,user) {
+  deleteUsers(id) {
     return new Promise((resolve, reject) => {
-        UsersDao.deleteData(id, user)
+        UsersDao.deleteData(id)
         .then(data => {
           resolve(data);
         }).catch(err => {

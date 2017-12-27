@@ -12,6 +12,7 @@ class BaseDao {
         );
     }
     query = query || {};
+    console.log(this.collection);
     return this.collection.find(query);
   }
 
@@ -21,7 +22,7 @@ class BaseDao {
         Utility.ErrorTypes.UNKNOWN_ERROR) //TODO change error type
       );
     }
-    this.collection.create(query);
+    return this.collection.create(query);
   }
 
   updateData(id, query) {
@@ -30,16 +31,13 @@ class BaseDao {
         Utility.ErrorTypes.UNKNOWN_ERROR) //TODO change error type
       );
     }
-    this.collection.update({_id: id}, {$set: query});
+    console.log(query);
+    return this.collection.update({_id: id}, {$set: query});
   }
 
-  deleteData(id, query) {
-    if (!query) {
-      (Utility.generateErrorMessage(
-        Utility.ErrorTypes.UNKNOWN_ERROR) //TODO change error type
-      );
-    }
-    this.collection.findOneAndRemove({_id: id}, {$set: query});
+  deleteData(id) {
+
+    return this.collection.findOneAndRemove({_id: id});
   }
 }
 
